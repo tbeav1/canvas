@@ -1,6 +1,6 @@
 <?php
 
-require_once('../.ignore.stmarksschool-test-authentication.inc.php');
+require_once('../.ignore.grading-scheme-authentication.inc.php');
 require_once('config.inc.php');
 
 require_once('../canvas-api.inc.php');
@@ -11,7 +11,7 @@ debugFlag('START');
 /* get all courses in our Academics sub-account */
 $courses = callCanvasApiPaginated(
 	CANVAS_API_GET,
-	'/accounts/132/courses'
+	'/accounts/' . AFFECTED_SUBACCOUNT_ID . '/courses' // TODO make this a GET parameter?
 );
 
 do {
@@ -29,7 +29,7 @@ do {
 					CANVAS_API_PUT,
 					"/courses/{$course['id']}/assignments/{$assignment['id']}",
 					array(
-						'assignment[grading_standard_id]' => '1' // our St. Mark's grading scheme
+						'assignment[grading_standard_id]' => STANDARD_GRADING_SCHEME_ID // the preferred standard grading scheme
 					)
 				);
 			}
